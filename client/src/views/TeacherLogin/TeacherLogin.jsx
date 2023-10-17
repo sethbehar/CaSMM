@@ -1,8 +1,9 @@
 import { message } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import { postUser, setUserSession } from '../../Utils/AuthRequests';
+import { UserAuth } from '../../context/AuthContext'
 import './TeacherLogin.less';
 
 const useFormInput = (initialValue) => {
@@ -22,6 +23,23 @@ export default function TeacherLogin() {
   const password = useFormInput('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {user} = UserAuth()
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 50))
+        setLoading(false)
+    }
+    checkAuthentication()
+}, [user])
+
+const handleGoogleSignIn = async () => {
+  try {
+      await googleSignIn()
+  } catch(error) {
+      console.log(error)
+  }
+}
 
   const handleLogin = () => {
     setLoading(true);
@@ -45,6 +63,7 @@ export default function TeacherLogin() {
       });
   };
 
+  console.log(email, password)
   return (
     <div className='container nav-padding'>
       <NavBar />
@@ -76,6 +95,11 @@ export default function TeacherLogin() {
             value={loading ? 'Loading...' : 'Login'}
             onClick={handleLogin}
             disabled={loading}
+          />
+          <input 
+            type='button'
+            value='Google login'
+            onClick={handleGoogleSignIn}
           />
         </form>
       </div>
