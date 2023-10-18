@@ -23,7 +23,7 @@ export default function TeacherLogin() {
   const password = useFormInput('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {user} = UserAuth()
+  const {user, googleSignIn, logOut} = UserAuth()
 
   useEffect(() => {
     const checkAuthentication = async () => {
